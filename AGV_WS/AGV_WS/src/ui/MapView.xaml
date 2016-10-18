@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="AGV_WS.src.ui.MapView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AGV_WS.src.ui"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+
+    <Grid Background="#FFF7F7F7"  ClipToBounds="True">
+        <Grid x:Name="markerCanvas">
+            <Grid.RenderTransform>
+                <TransformGroup x:Name="mapTransGroup">
+                    <TranslateTransform x:Name="mapTranslateTransform" />
+                    <ScaleTransform x:Name="mapScaleTransform"/>
+                </TransformGroup>
+            </Grid.RenderTransform>
+            <Canvas x:Name="bgMapLayer"/>
+            <Canvas x:Name="planLayer"/>
+            <Canvas x:Name="cardLayer"/>
+            <Canvas x:Name="agvLayer" />
+        </Grid>
+    </Grid>
+</UserControl>
