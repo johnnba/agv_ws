@@ -1,0 +1,68 @@
+﻿<Window x:Class="AGV_WS.src.ui.AgvPlanView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AGV_WS.src.ui"
+        xmlns:res="clr-namespace:AGV_WS.Properties"
+        xmlns:model="clr-namespace:AGV_WS.src.model"
+        mc:Ignorable="d"
+        Title="AgvPlanView" Height="600" Width="600" WindowStartupLocation="CenterOwner">
+    <DockPanel>
+        <Grid DockPanel.Dock="Top">
+            <ToolBarTray>
+                <ToolBar>
+                    <Button x:Name="toolbarOpen" Content="{x:Static res:Resources.IDS_TOOLBAR_OPEN}" Click="Button_Click"/>
+                </ToolBar>
+            </ToolBarTray>
+        </Grid>
+        <DockPanel DockPanel.Dock="Bottom">
+            <StackPanel DockPanel.Dock="Right">
+                <Button x:Name="buttonUpdate" Content="{x:Static res:Resources.IDS_UPDATE}" Margin="10" Click="Button_Click"/>
+                <Button x:Name="buttonSend" Content="{x:Static res:Resources.IDS_SEND}" Margin="10" Click="Button_Click"/>
+            </StackPanel>
+            <ListView x:Name="sessionListView">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="{x:Static res:Resources.IDS_AGV_ID}" DisplayMemberBinding="{Binding AgvId}"/>
+                        <GridViewColumn Header="{x:Static res:Resources.IDS_SESSION}" DisplayMemberBinding="{Binding SocketInfo}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </DockPanel>
+        <Grid>
+            <TreeView x:Name="agvPathTree">
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <Setter Property="IsExpanded" Value="True" />
+                    </Style>
+                </TreeView.ItemContainerStyle>
+                <TreeView.Resources>
+                    <HierarchicalDataTemplate  DataType="{x:Type model:AgvPlan}" ItemsSource="{Binding Tasks}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                    <HierarchicalDataTemplate  DataType="{x:Type model:AgvTask}" ItemsSource="{Binding Steps}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Name}"  Margin="5 0 0 0"/>
+                            <TextBlock Text="Loop:"  Margin="5 0 0 0"/>
+                            <TextBlock Text="{Binding Loop}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                    <HierarchicalDataTemplate  DataType="{x:Type model:AgvStep}" ItemsSource="{Binding Cmds}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding CardId}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                    <HierarchicalDataTemplate  DataType="{x:Type model:AgvCmd}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Key}" />
+                            <TextBlock Text="{Binding Value}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.Resources>
+            </TreeView>
+        </Grid>
+    </DockPanel>
+</Window>

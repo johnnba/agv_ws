@@ -115,6 +115,24 @@ namespace AGV_WS.Properties {
         }
         
         /// <summary>
+        ///   查找类似 AGV_WS 的本地化字符串。
+        /// </summary>
+        public static string IDS_APP {
+            get {
+                return ResourceManager.GetString("IDS_APP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 确定要关闭吗? 的本地化字符串。
+        /// </summary>
+        public static string IDS_EXITPROMPT {
+            get {
+                return ResourceManager.GetString("IDS_EXITPROMPT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 AGV工作站 的本地化字符串。
         /// </summary>
         public static string IDS_MAIN_TITLE {
@@ -142,11 +160,65 @@ namespace AGV_WS.Properties {
         }
         
         /// <summary>
+        ///   查找类似 Plan is NULL 的本地化字符串。
+        /// </summary>
+        public static string IDS_PLANISNULL {
+            get {
+                return ResourceManager.GetString("IDS_PLANISNULL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 历史回放 的本地化字符串。
         /// </summary>
         public static string IDS_PLAYBACK {
             get {
                 return ResourceManager.GetString("IDS_PLAYBACK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 请选择一个目的AGV。 的本地化字符串。
+        /// </summary>
+        public static string IDS_SELECTAGV {
+            get {
+                return ResourceManager.GetString("IDS_SELECTAGV", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 发送 的本地化字符串。
+        /// </summary>
+        public static string IDS_SEND {
+            get {
+                return ResourceManager.GetString("IDS_SEND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 会话 的本地化字符串。
+        /// </summary>
+        public static string IDS_SESSION {
+            get {
+                return ResourceManager.GetString("IDS_SESSION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 EXIT 的本地化字符串。
+        /// </summary>
+        public static string IDS_TOOLBAR_EXIT {
+            get {
+                return ResourceManager.GetString("IDS_TOOLBAR_EXIT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 打开 的本地化字符串。
+        /// </summary>
+        public static string IDS_TOOLBAR_OPEN {
+            get {
+                return ResourceManager.GetString("IDS_TOOLBAR_OPEN", resourceCulture);
             }
         }
         
@@ -165,6 +237,15 @@ namespace AGV_WS.Properties {
         public static string IDS_TOOLBAR_STOP {
             get {
                 return ResourceManager.GetString("IDS_TOOLBAR_STOP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 刷新 的本地化字符串。
+        /// </summary>
+        public static string IDS_UPDATE {
+            get {
+                return ResourceManager.GetString("IDS_UPDATE", resourceCulture);
             }
         }
     }

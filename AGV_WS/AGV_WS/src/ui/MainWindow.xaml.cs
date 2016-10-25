@@ -26,88 +26,33 @@ namespace AGV_WS.src.ui
         {
             InitializeComponent();
             Init();
+
+            //窗口最大化
+            this.WindowState = WindowState.Maximized;
         }
 
-        void Init()
+        private void Init()
         {
+            agvListView.ItemsSource = AgvInfoManager.instance.Agvs;
 
-            ObservableCollection<AgvInfo> agvInfos = new ObservableCollection<AgvInfo>();
-            agvListView.ItemsSource = agvInfos;
-
-            AgvInfo info = new AgvInfo();
-            info.Id = 1;
-            info.Position = "L01 S01";
-            info.Status = 2;
-            info.Power = 60;
-            AgvInfo info2 = new AgvInfo();
-            info2.Id = 2;
-            info2.Position = "L02 S02";
-            info2.Status = 2;
-            info2.Power = 90;
-            AgvInfo info3 = new AgvInfo();
-            info3.Id = 3;
-            info3.Position = "L02 S03";
-            info3.Status = 2;
-            info3.Power = 10;
-
-
-            agvInfos.Add(info);
-            agvInfos.Add(info2);
-            agvInfos.Add(info3);
-
-            AgvCmd cmd = new AgvCmd();
-            cmd.Key = 1;
-            cmd.Value = 0;
-            AgvCmd cmd2 = new AgvCmd();
-            cmd.Key = 2;
-            cmd.Value = 1;
-            AgvCmd cmd3 = new AgvCmd();
-            cmd.Key = 3;
-            cmd.Value = 0;
-
-            AgvStep step = new AgvStep();
-            step.CardId = "S01";
-            step.Cmds = new ObservableCollection<AgvCmd>();
-            step.Cmds.Add(cmd);
-            step.Cmds.Add(cmd2);
-            step.Cmds.Add(cmd3);
-            AgvStep step2 = new AgvStep();
-            step.CardId = "S02";
-            AgvStep step3 = new AgvStep();
-            step.CardId = "S03";
-            AgvStep step4 = new AgvStep();
-            step.CardId = "S04";
-            AgvStep step5 = new AgvStep();
-            step.CardId = "S05";
-
-            AgvTask task = new AgvTask();
-            task.Id = 1;
-            task.Name = "task 01";
-            task.Loop = 10;
-            task.Steps = new ObservableCollection<AgvStep>();
-            task.Steps.Add(step);
-            task.Steps.Add(step);
-            task.Steps.Add(step);
-            task.Steps.Add(step);
-            task.Steps.Add(step);
-
-            AgvPlan plan = new AgvPlan();
-            plan.Id = 1;
-            plan.Name = "plan 01";
-            plan.Tasks = new ObservableCollection<AgvTask>();
-            plan.Tasks.Add(task);
-
+        }
+        private void currentAgvChanged()
+        {
             List<AgvPlan> plans = new List<AgvPlan>();
-            plans.Add(plan);
+            if (AgvInfoManager.instance.CurrentAgv != null && AgvInfoManager.instance.CurrentAgv.CurrentPlan != null)
+            {
+                plans.Add(AgvInfoManager.instance.CurrentAgv.CurrentPlan);
+            }
             agvPathTree.ItemsSource = plans;
-
-
         }
 
         private void mapViewer_Loaded(object sender, RoutedEventArgs e)
         {
             mapViewer.Init();
-            mapViewer.setCards();
+            AgvMap map = new AgvMap(1);
+            mapViewer.SetMap(map);
+
+            mapViewer.setAgvs();
 
         }
 
@@ -118,7 +63,12 @@ namespace AGV_WS.src.ui
                 Button button = sender as Button;
                 if (button != null)
                 {
-                    if (button.Name == "toolbarStart")
+                    if (button.Name == "toolbarPlanView")
+                    {
+                        AgvPlanView.instance.Owner = this;
+                        AgvPlanView.instance.Show();
+                    }
+                    else if (button.Name == "toolbarStart")
                     {
                         ServiceManager.instance.Start();
                     }
@@ -126,9 +76,35 @@ namespace AGV_WS.src.ui
                     {
                         ServiceManager.instance.Stop();
                     }
+                    else if (button.Name == "toolbarExit")
+                    {
+                        ExitApp();
+                    }
                 }
             }
+        }
+
+        private void ExitApp()
+        {
+            if (System.Windows.MessageBox.Show(Properties.Resources.IDS_EXITPROMPT,
+                                               Properties.Resources.IDS_APP,
+                                                MessageBoxButton.YesNo,
+                                                MessageBoxImage.Question,
+                                                MessageBoxResult.No) == MessageBoxResult.Yes)
+            {
+                Environment.Exit(0);
+            }
             
+        }
+
+        private void agvListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            AgvInfo agvinfo = agvListView.SelectedItem as AgvInfo;
+
+            AgvInfoManager.instance.SetCurrent(agvinfo.Id);
+
+            currentAgvChanged();
+
         }
     }
 }

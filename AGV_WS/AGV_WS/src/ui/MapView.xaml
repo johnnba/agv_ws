@@ -16,7 +16,6 @@
                 </TransformGroup>
             </Grid.RenderTransform>
             <Canvas x:Name="bgMapLayer"/>
-            <Canvas x:Name="planLayer"/>
             <Canvas x:Name="cardLayer"/>
             <Canvas x:Name="agvLayer" />
         </Grid>

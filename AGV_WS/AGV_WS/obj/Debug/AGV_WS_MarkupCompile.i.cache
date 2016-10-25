@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 D:\Projects\AGV_WS\AGV_WS\App.xaml
-3-1583934943
+52043000738
 1-2138471434
-151611389782
-131136825457
-src\ui\CardMarker.xaml;src\ui\MainWindow.xaml;src\ui\MapView.xaml;
+25935062784
+151363218012
+src\ui\AgvMarker.xaml;src\ui\AgvPlanView.xaml;src\ui\CardMarker.xaml;src\ui\MainWindow.xaml;src\ui\MapView.xaml;
 
 False
 

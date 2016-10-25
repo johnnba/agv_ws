@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AGV_WS.src.utils;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -11,6 +13,7 @@ namespace AGV_WS.src.model
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
+        private AgvPlan() { }
         public int Id { get; set; }
         public string Name { get; set; }
         public int TaskNum { get; set; } //待定
@@ -21,6 +24,28 @@ namespace AGV_WS.src.model
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
+        }
+
+        public string ToJson()
+        {
+            string json = JsonConvert.SerializeObject(this);
+
+            Logger.Debug(json);
+
+            return json;
+        }
+
+        public static AgvPlan FromJson(string jsonstr)
+        {
+            AgvPlan plan = JsonConvert.DeserializeObject<AgvPlan>(jsonstr);
+            return plan;
+        }
+
+        public byte[] ToJsonBytes()
+        {
+            string json = JsonConvert.SerializeObject(this);
+
+            return System.Text.Encoding.Default.GetBytes(json);
         }
 
     }

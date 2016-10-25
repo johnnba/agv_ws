@@ -15,19 +15,17 @@ using System.Windows.Shapes;
 namespace AGV_WS.src.ui
 {
     /// <summary>
-    /// CardMarker.xaml 的交互逻辑
+    /// AgvMarker.xaml 的交互逻辑
     /// </summary>
-    public partial class CardMarker : UserControl
+    public partial class AgvMarker : UserControl
     {
-        private int _id;
         public int OffsetX { get { return (int)bg.Width / 2; } }
         public int OffsetY { get { return (int)bg.Height / 2; } }
-        public CardMarker(int id)
+        public AgvMarker(string label)
         {
-            _id = id;
             InitializeComponent();
 
-            labeltext.Text = _id.ToString("D5");
+            labeltext.Text = label;
         }
     }
 }

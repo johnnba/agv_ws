@@ -135,6 +135,12 @@
   <data name="IDS_AGV_STOP" xml:space="preserve">
     <value>停止</value>
   </data>
+  <data name="IDS_APP" xml:space="preserve">
+    <value>AGV_WS</value>
+  </data>
+  <data name="IDS_EXITPROMPT" xml:space="preserve">
+    <value>确定要关闭吗?</value>
+  </data>
   <data name="IDS_MAIN_TITLE" xml:space="preserve">
     <value>AGV工作站</value>
   </data>
@@ -144,13 +150,34 @@
   <data name="IDS_PATH_EDIT" xml:space="preserve">
     <value>路径规划</value>
   </data>
+  <data name="IDS_PLANISNULL" xml:space="preserve">
+    <value>Plan is NULL</value>
+  </data>
   <data name="IDS_PLAYBACK" xml:space="preserve">
     <value>历史回放</value>
+  </data>
+  <data name="IDS_SELECTAGV" xml:space="preserve">
+    <value>请选择一个目的AGV。</value>
+  </data>
+  <data name="IDS_SEND" xml:space="preserve">
+    <value>发送</value>
+  </data>
+  <data name="IDS_SESSION" xml:space="preserve">
+    <value>会话</value>
+  </data>
+  <data name="IDS_TOOLBAR_EXIT" xml:space="preserve">
+    <value>EXIT</value>
+  </data>
+  <data name="IDS_TOOLBAR_OPEN" xml:space="preserve">
+    <value>打开</value>
   </data>
   <data name="IDS_TOOLBAR_START" xml:space="preserve">
     <value>START</value>
   </data>
   <data name="IDS_TOOLBAR_STOP" xml:space="preserve">
     <value>STOP</value>
+  </data>
+  <data name="IDS_UPDATE" xml:space="preserve">
+    <value>刷新</value>
   </data>
 </root>

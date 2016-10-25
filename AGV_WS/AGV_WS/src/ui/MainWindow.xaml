@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:AGV_WS.src.ui"
         xmlns:model="clr-namespace:AGV_WS.src.model"
         mc:Ignorable="d"
-        Title="{x:Static res:Resources.IDS_MAIN_TITLE}" Height="768" Width="1366">
+        Title="{x:Static res:Resources.IDS_MAIN_TITLE}">
     <Grid>
         <DockPanel>
             <Grid DockPanel.Dock="Top">
@@ -21,7 +21,7 @@
                     <ToolBarTray DockPanel.Dock="Top">
                         <ToolBar>
                             <Button Content="{x:Static res:Resources.IDS_MAP_EDIT}" />
-                            <Button Content="{x:Static res:Resources.IDS_PATH_EDIT}" />
+                            <Button x:Name="toolbarPlanView" Content="{x:Static res:Resources.IDS_PATH_EDIT}" Click="Button_Click" />
                         </ToolBar>
                         <ToolBar>
                             <Button Content="{x:Static res:Resources.IDS_PLAYBACK}" />
@@ -32,6 +32,9 @@
                         <ToolBar>
                             <Button x:Name="toolbarStart" Content="{x:Static res:Resources.IDS_TOOLBAR_START}" Click="Button_Click" />
                             <Button x:Name="toolbarStop" Content="{x:Static res:Resources.IDS_TOOLBAR_STOP}" Click="Button_Click" />
+                        </ToolBar>
+                        <ToolBar>
+                            <Button x:Name="toolbarExit"  Content="{x:Static res:Resources.IDS_TOOLBAR_EXIT}" Click="Button_Click" />
                         </ToolBar>
                     </ToolBarTray>
                 </StackPanel>
@@ -45,7 +48,7 @@
             <DockPanel>
                 <Grid DockPanel.Dock="Bottom">
                     <StackPanel Orientation="Horizontal">
-                        <ListView x:Name="agvListView" ScrollViewer.CanContentScroll="True" >
+                        <ListView x:Name="agvListView" ScrollViewer.CanContentScroll="True" SelectionChanged="agvListView_SelectionChanged" >
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="{x:Static res:Resources.IDS_AGV_ID}" DisplayMemberBinding="{Binding Id}"/>
@@ -75,7 +78,7 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                        <TreeView x:Name="agvPathTree" Height="100" Width="300">
+                        <TreeView x:Name="agvPathTree" Height="200" Width="300">
                             <TreeView.ItemContainerStyle>
                                 <Style TargetType="{x:Type TreeViewItem}">
                                     <Setter Property="IsExpanded" Value="True" />

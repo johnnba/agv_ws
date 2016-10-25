@@ -5,15 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AGV_WS.src.ui"
              mc:Ignorable="d" >
-
     <Canvas>
         <Grid Width="16" Height="16">
-            <Ellipse x:Name="baseEllipse" Width="16" Height="16" Fill="Gray" />
+            <Ellipse x:Name="bg" Width="16" Height="16" Fill="Gray" />
             <Ellipse Width="14" Height="14" Stroke="#DDFFFFFF" StrokeThickness="1"/>
             <TextBlock Text="S" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="10" FontWeight="Heavy" Foreground="White"/>
-            <Ellipse x:Name="image" Width="16" Height="16" Fill="Transparent" />
         </Grid>
-        <Border x:Name="label" CornerRadius="5" Padding="5,2" Canvas.Top="-5" Canvas.Left="20">
+        <Border x:Name="label" CornerRadius="5" Padding="5,2" Canvas.Top="-20" Canvas.Left="10">
             <TextBlock x:Name="labeltext" />
         </Border>
     </Canvas>
