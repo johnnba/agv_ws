@@ -38,27 +38,29 @@
                     </Style>
                 </TreeView.ItemContainerStyle>
                 <TreeView.Resources>
-                    <HierarchicalDataTemplate  DataType="{x:Type model:AgvPlan}" ItemsSource="{Binding Tasks}">
+                    <HierarchicalDataTemplate  DataType="{x:Type model:AgvPlan}" ItemsSource="{Binding taskset}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Name}" />
+                            <TextBlock Text="{Binding planname}" />
                         </StackPanel>
                     </HierarchicalDataTemplate>
-                    <HierarchicalDataTemplate  DataType="{x:Type model:AgvTask}" ItemsSource="{Binding Steps}">
+                    <HierarchicalDataTemplate  DataType="{x:Type model:AgvTask}" ItemsSource="{Binding stepset}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Name}"  Margin="5 0 0 0"/>
+                            <TextBlock Text="{Binding taskname}"  Margin="5 0 0 0"/>
                             <TextBlock Text="Loop:"  Margin="5 0 0 0"/>
-                            <TextBlock Text="{Binding Loop}" />
+                            <TextBlock Text="{Binding loop}" />
                         </StackPanel>
                     </HierarchicalDataTemplate>
-                    <HierarchicalDataTemplate  DataType="{x:Type model:AgvStep}" ItemsSource="{Binding Cmds}">
+                    <HierarchicalDataTemplate  DataType="{x:Type model:AgvStep}" ItemsSource="{Binding cmdset}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding CardId}" />
+                            <TextBlock Text="{Binding cardid}" />
                         </StackPanel>
                     </HierarchicalDataTemplate>
                     <HierarchicalDataTemplate  DataType="{x:Type model:AgvCmd}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Key}" />
-                            <TextBlock Text="{Binding Value}" />
+                            <TextBlock Text="type:"/>
+                            <TextBlock Text="{Binding type}" Margin="5 0"/>
+                            <TextBlock Text="value:"/>
+                            <TextBlock Text="{Binding value}" Margin="5 0"/>
                         </StackPanel>
                     </HierarchicalDataTemplate>
                 </TreeView.Resources>

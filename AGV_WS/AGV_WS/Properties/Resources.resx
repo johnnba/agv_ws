@@ -126,6 +126,9 @@
   <data name="IDS_AGV_POWER" xml:space="preserve">
     <value>电量</value>
   </data>
+  <data name="IDS_AGV_SPEED" xml:space="preserve">
+    <value>速度</value>
+  </data>
   <data name="IDS_AGV_START" xml:space="preserve">
     <value>启动</value>
   </data>
@@ -134,6 +137,9 @@
   </data>
   <data name="IDS_AGV_STOP" xml:space="preserve">
     <value>停止</value>
+  </data>
+  <data name="IDS_AGV_ULTRASONIC" xml:space="preserve">
+    <value>超声</value>
   </data>
   <data name="IDS_APP" xml:space="preserve">
     <value>AGV_WS</value>

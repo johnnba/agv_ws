@@ -1,8 +1,11 @@
 ﻿using AGV_WS.src.common;
 using AGV_WS.src.model;
+using AGV_WS.src.utils;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -49,9 +52,18 @@ namespace AGV_WS.src.ui
         private void mapViewer_Loaded(object sender, RoutedEventArgs e)
         {
             mapViewer.Init();
-            AgvMap map = new AgvMap(1);
-            mapViewer.SetMap(map);
 
+
+            FileStream fsRead = new FileStream("./db/map.json", FileMode.Open);
+
+            int fsLen = (int)fsRead.Length;
+            byte[] heByte = new byte[fsLen];
+            int r = fsRead.Read(heByte, 0, heByte.Length);
+
+            string json = System.Text.Encoding.GetEncoding("gb2312").GetString(heByte);
+            AgvMap plan = JsonConvert.DeserializeObject<AgvMap>(json);
+
+            mapViewer.SetMap(plan);
             mapViewer.setAgvs();
 
         }

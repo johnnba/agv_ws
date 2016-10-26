@@ -1,4 +1,5 @@
-﻿using AGV_WS.src.model;
+﻿using AGV_WS.src.common;
+using AGV_WS.src.model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace AGV_WS.src.ui
 {
@@ -21,10 +23,102 @@ namespace AGV_WS.src.ui
     public partial class MapView : UserControl
     {
         private AgvMap _map;
+        private DispatcherTimer _timer;
+        private double updateSpeed = 100;
+        private bool _isMouseLeftButtonDown = false;
+        private Point _startPoint;
 
         public MapView()
         {
             InitializeComponent();
+
+            MouseWheel += MapView_MouseWheel;
+            MouseMove += MapView_MouseMove;
+            MouseLeftButtonDown += MapView_MouseLeftButtonDown;
+            MouseLeftButtonUp += MapView_MouseLeftButtonUp;
+
+            _timer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(updateSpeed) };
+            _timer.Tick += new EventHandler(timer_Tick);
+            _timer.Start();
+        }
+
+        private void MapView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            _isMouseLeftButtonDown = false;
+        }
+
+        private void MapView_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.Focus();
+
+            _isMouseLeftButtonDown = true;
+            _startPoint = e.GetPosition(null);
+           
+        }
+
+        private void MapView_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_isMouseLeftButtonDown && e.LeftButton == MouseButtonState.Pressed)
+            {
+                Point p = e.GetPosition(null);
+
+                mapTranslateTransform.X += (p.X - _startPoint.X) * (1 / mapScaleTransform.ScaleX);
+                mapTranslateTransform.Y += (p.Y - _startPoint.Y) * (1 / mapScaleTransform.ScaleY);
+
+                _startPoint = p;
+
+                grid.InvalidateVisual();
+            }
+        }
+        private void MapView_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            double scale = e.Delta * 0.001;
+
+            if (mapScaleTransform.ScaleX + scale > 0.3 && mapScaleTransform.ScaleY + scale > 0.3)
+            {
+                Point point = e.GetPosition(this);
+
+                mapScaleTransform.CenterX = point.X;
+                mapScaleTransform.CenterY = point.Y;
+
+                mapScaleTransform.ScaleX += scale;
+                mapScaleTransform.ScaleY += scale;
+
+                grid.InvalidateVisual();
+            }
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            refreshAgv();
+
+            grid.InvalidateVisual();
+        }
+
+        private void refreshAgv()
+        {
+            if (_map != null)
+            {
+                foreach (AgvMarker marker in agvLayer.Children)
+                {
+                    AgvInfo agv = marker.AgvInfo;
+                    if (agv.Online)
+                    {
+                        UInt16 cardId = agv.PositionCardId;
+                        Point position;
+                        if (_map.getCardPosition(cardId, out position))
+                        {
+                            marker.SetValue(Canvas.LeftProperty, position.X - marker.OffsetX);
+                            marker.SetValue(Canvas.TopProperty, position.Y - marker.OffsetY);
+                            marker.Visibility = Visibility.Visible;
+                        }
+                    }
+                    else
+                    {
+                        marker.Visibility = Visibility.Collapsed;
+                    }
+                }
+            }
         }
 
         public void SetMap(AgvMap map)
@@ -32,6 +126,7 @@ namespace AGV_WS.src.ui
             _map = map;
 
             bgMapLayer.Children.Clear();
+            cardLayer.Children.Clear();
 
             if (_map != null)
             {
@@ -42,8 +137,10 @@ namespace AGV_WS.src.ui
                 var pathGeometry = new PathGeometry();
                 foreach (AgvMapPath p in _map.Paths)
                 {
-                    var pathFigure = new PathFigure { StartPoint = p.Position1 };
-                    pathFigure.Segments.Add(new LineSegment { Point = p.Position2 });
+                    Point point1 = new Point(p.Position1X, p.Position1Y);
+                    var pathFigure = new PathFigure { StartPoint = point1 };
+                    Point point2 = new Point(p.Position2X, p.Position2Y);
+                    pathFigure.Segments.Add(new LineSegment { Point = point2 });
                     pathGeometry.Figures.Add(pathFigure);
                 }
                 path.Data = pathGeometry;
@@ -52,8 +149,8 @@ namespace AGV_WS.src.ui
                 foreach (AgvMapCard c in _map.Cards)
                 {
                     CardMarker cm = new CardMarker(c.CardId);
-                    cm.SetValue(Canvas.LeftProperty, c.Position.X - cm.OffsetX);
-                    cm.SetValue(Canvas.TopProperty, c.Position.Y - cm.OffsetY);
+                    cm.SetValue(Canvas.LeftProperty, (double)c.PositionX - cm.OffsetX);
+                    cm.SetValue(Canvas.TopProperty, (double)c.PositionY - cm.OffsetY);
                     //cm.Visibility = Visibility.Visible;
                     cardLayer.Children.Add(cm);
                 }
@@ -65,22 +162,21 @@ namespace AGV_WS.src.ui
             bgMapLayer.Children.Clear();
             cardLayer.Children.Clear();
             agvLayer.Children.Clear();
+
+            _startPoint = new Point(mapTranslateTransform.X, mapTranslateTransform.Y);
+            grid.SetMap(this);
         }
         public void setAgvs()
         {
             agvLayer.Children.Clear();
 
-            double[] pntX = new double[] { 300, 600, 1100, 1200, 1200, 1100, 700, 300, 200, 200 };
-            double[] pntY = new double[] { 100, 100, 100, 200, 400, 500, 500, 500, 400, 200 };
-            string[] label = new string[] { "AGV01", "AGV02", "AGV03", "AGV04", "AGV05", "AGV06", "AGV07", "AGV08", "AGV09", "AGV10" };
+            foreach (AgvInfo agv in AgvInfoManager.instance.Agvs)
+            {
+                AgvMarker am = new AgvMarker(agv.Id);
+                am.Visibility = Visibility.Collapsed;
+                agvLayer.Children.Add(am);
+            }
 
-            int i = 1;
-
-            AgvMarker am = new AgvMarker(label[i]);
-            am.SetValue(Canvas.LeftProperty, pntX[i] - am.OffsetX);
-            am.SetValue(Canvas.TopProperty, pntY[i] - am.OffsetY);
-
-            agvLayer.Children.Add(am);
         }
     }
 }

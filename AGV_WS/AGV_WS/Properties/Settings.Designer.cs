@@ -46,5 +46,65 @@ namespace AGV_WS.Properties {
                 this["BufferSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowOrigin {
+            get {
+                return ((bool)(this["ShowOrigin"]));
+            }
+            set {
+                this["ShowOrigin"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowGrid {
+            get {
+                return ((bool)(this["ShowGrid"]));
+            }
+            set {
+                this["ShowGrid"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public float GridWidth {
+            get {
+                return ((float)(this["GridWidth"]));
+            }
+            set {
+                this["GridWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public float GridHeight {
+            get {
+                return ((float)(this["GridHeight"]));
+            }
+            set {
+                this["GridHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("50")]
+        public uint PixelsPerMeter {
+            get {
+                return ((uint)(this["PixelsPerMeter"]));
+            }
+            set {
+                this["PixelsPerMeter"] = value;
+            }
+        }
     }
 }

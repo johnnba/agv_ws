@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Windows;
 
 namespace AGV_WS.src.common
@@ -13,51 +14,59 @@ namespace AGV_WS.src.common
     public class ServiceManager
     {
         private Socket _server;
-        private List<AgvSession> _threads;
+        private Thread _t;
+        private bool _stopflag;
 
         private ServiceManager()
         {
             _server = null;
-            _threads = new List<AgvSession>();
+            _stopflag = true;
         }
         public static readonly ServiceManager instance = new ServiceManager();
 
         public void Start()
         {
+            _stopflag = false;
+            _t = new Thread(run);
+            _t.Start();
+        }
+        private void run()
+        {
             try
             {
-                if (_server == null)
+                if (_server != null)
                 {
-                    _server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                    IPEndPoint iep = new IPEndPoint(IPAddress.Any, Properties.Settings.Default.SocketPort);
-                    _server.Bind(iep);
+                    _server.Dispose();
+                }
+                _server = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                IPEndPoint iep = new IPEndPoint(IPAddress.Any, Properties.Settings.Default.SocketPort);
+                _server.Bind(iep);
 
-                    _server.Listen(20);
-                    _server.BeginAccept(new AsyncCallback(accept), _server);
-                }
-                else
-                {
-                    Logger.Debug("do Stop first.");
-                }
+                _server.Listen(20);
+                _server.BeginAccept(new AsyncCallback(accept), _server);
+
             }
             catch (Exception e)
             {
                 Logger.Error(e.ToString());
             }
 
-        }
+            while (!_stopflag)
+            {
+                Thread.Sleep(100);
+            }
 
+            _server.Close();
+            _server = null;
+
+        }
         public void Stop()
         {
-            if (_server != null)
-            {
-                _server.Close();
-                _server = null;
-            }
-            else
-            {
-                Logger.Debug("do Start first.");
-            }
+            _stopflag = true;
+
+            if (_t != null && _t.ThreadState == System.Threading.ThreadState.Running)
+                _t.Abort();
+            _t = null;
         }
 
         private void accept(IAsyncResult iar)
@@ -120,7 +129,7 @@ namespace AGV_WS.src.common
                         UInt64 agv_id;
                         if (_getAgvId(state.buffer, bytesRead, out agv_id))
                         {
-                            SessionManager.instance.Sessions.Add(new AgvSession(agv_id, client));
+                            SessionManager.instance.AddSession(new AgvSession(agv_id, client));
                         }
                         else
                         {
@@ -139,8 +148,8 @@ namespace AGV_WS.src.common
         private bool _getAgvId(byte[] buffer, int length, out UInt64 agv_id)
         {
             agv_id = 0;
-            Package package = Package.decode(buffer, length);
-            if (package != null)
+            List<Package> packages = Package.decode(buffer, length);
+            foreach (Package package in packages)
             {
                 byte[] src = package.Src;
                 Array.Reverse(src);
@@ -148,7 +157,6 @@ namespace AGV_WS.src.common
                 return true;
             }
             return false;
-
         }
     }
 }

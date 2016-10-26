@@ -11,9 +11,9 @@ namespace AGV_WS.src.model
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public string CardId { get; set; }
-        public int CmdNum { get; set; }
-        public ObservableCollection<AgvCmd> Cmds{ get; set; }
+        public string cardid { get; set; }
+        public int cmdnum { get; set; }
+        public ObservableCollection<AgvCmd> cmdset{ get; set; }
 
         private void NotifyPropertyChanged(String info)
         {

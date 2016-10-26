@@ -36,6 +36,7 @@ namespace RemotePLC.src.comm.protocol
 
         public UInt16 Id { get { return _id; } }
         public byte[] Src { get { return _src; } }
+        public byte[] Payload { get { return _payload; } }
 
         private Package(byte[] src, byte[] dst, UInt16 id, byte[] payload)
         {
@@ -45,19 +46,18 @@ namespace RemotePLC.src.comm.protocol
             _payload = payload;
         }
 
-        public static Package decode(byte[] buffer, int length)
+        public static List<Package> decode(byte[] buffer, int length)
         {
+            List<Package> packages = new List<Package>();
             byte[] bytes = buffer.Take(length).ToArray();
-
             MemoryStream ms = new MemoryStream(bytes);
-
-            while (ms.Length >= 2 + 2 + 8 + 8 + 2 + 2)
+            while (ms.Length - ms.Position >= 2 + 2 + 8 + 8 + 2 + 2)
             {
                 if (ms.ReadByte() == 0xef && ms.ReadByte() == 0xef)
                 {
                     byte[] len = new byte[2];
                     ms.Read(len, 0, len.Length);
-                    Array.Reverse(len);
+                    //Array.Reverse(len);
                     UInt16 ulen = BitConverter.ToUInt16(len, 0);
                     if (ulen < ms.Length)
                     {
@@ -67,7 +67,7 @@ namespace RemotePLC.src.comm.protocol
                         ms.Read(dst, 0, dst.Length);
                         byte[] id = new byte[2];
                         ms.Read(id, 0, id.Length);
-                        Array.Reverse(id);
+                        //Array.Reverse(id);
                         UInt16 uid = BitConverter.ToUInt16(id, 0);
 
                         int payloadlen = ulen - 8 - 8 - 2 - 2;
@@ -76,12 +76,13 @@ namespace RemotePLC.src.comm.protocol
 
                         if (ms.ReadByte() == 0xee && ms.ReadByte() == 0xee)
                         {
-                            return new Package(src, dst, uid, payload);
+                            packages.Add(new Package(src, dst, uid, payload));
                         }
                     }
                 }
             }
-            return null;
+
+            return packages;
         }
 
         public static Package encode(UInt64 agvId, UInt16 msgId, byte[] payload)

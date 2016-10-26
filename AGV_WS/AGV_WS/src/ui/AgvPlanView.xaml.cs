@@ -59,7 +59,7 @@ namespace AGV_WS.src.ui
                 byte[] heByte = new byte[fsLen];
                 int r = fsRead.Read(heByte, 0, heByte.Length);
 
-                string json = System.Text.Encoding.UTF8.GetString(heByte);
+                string json = System.Text.Encoding.GetEncoding("gb2312").GetString(heByte);
                 Logger.Debug(json);
                 setPlan(json);
 
@@ -73,6 +73,9 @@ namespace AGV_WS.src.ui
             plans.Add(_plan);
 
             agvPathTree.ItemsSource = plans;
+
+            //
+            AgvPlanManager.instance.AddPlan(_plan);
         }
 
         private void sendPlan()

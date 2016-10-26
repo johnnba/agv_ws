@@ -88,6 +88,15 @@ namespace AGV_WS.Properties {
         }
         
         /// <summary>
+        ///   查找类似 速度 的本地化字符串。
+        /// </summary>
+        public static string IDS_AGV_SPEED {
+            get {
+                return ResourceManager.GetString("IDS_AGV_SPEED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 启动 的本地化字符串。
         /// </summary>
         public static string IDS_AGV_START {
@@ -111,6 +120,15 @@ namespace AGV_WS.Properties {
         public static string IDS_AGV_STOP {
             get {
                 return ResourceManager.GetString("IDS_AGV_STOP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 超声 的本地化字符串。
+        /// </summary>
+        public static string IDS_AGV_ULTRASONIC {
+            get {
+                return ResourceManager.GetString("IDS_AGV_ULTRASONIC", resourceCulture);
             }
         }
         

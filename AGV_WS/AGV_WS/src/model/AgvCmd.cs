@@ -10,9 +10,9 @@ namespace AGV_WS.src.model
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public int Key { get; set; }
+        public string type { get; set; }
 
-        public int Value { get; set; }
+        public int value { get; set; }
 
         private void NotifyPropertyChanged(String info)
         {

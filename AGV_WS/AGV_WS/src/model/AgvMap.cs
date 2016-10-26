@@ -1,82 +1,73 @@
-﻿using System;
+﻿using AGV_WS.src.utils;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
 
 namespace AGV_WS.src.model
 {
-    public class AgvMapPath
+    public class AgvMapPath : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
         public int PathId { get; set; }
-        public Point Position1 { get; set; }
-        public Point Position2 { get; set; }
-    }
-
-    public class AgvMapCard
-    {
-        public int CardId { get; set; }
-        public Point Position { get; set; }
-    }
-
-    public class AgvMap
-    {
-        private int _id;
-        private List<AgvMapPath> _paths;
-        private List<AgvMapCard> _cards;
-
-        public List<AgvMapPath> Paths { get { return _paths; } }
-        public List<AgvMapCard> Cards { get { return _cards; } }
-
-        public AgvMap(int id)
+        public int Position1X { get; set; }
+        public int Position1Y { get; set; }
+        public int Position2X { get; set; }
+        public int Position2Y { get; set; }
+        private void NotifyPropertyChanged(String info)
         {
-            _id = id;
-
-            _paths = new List<AgvMapPath>();
-
-            _cards = new List<AgvMapCard>();
-
-            init();
-        }
-
-        private void init()
-        {
-            double[] pntX = new double[] { 300, 600, 1100, 1200, 1200, 1100, 700, 300, 200, 200 };
-            double[] pntY = new double[] { 100, 100, 100, 200, 400, 500, 500, 500, 400, 200 };
-
-            for (int i = 0; i < 10; i++)
+            if (PropertyChanged != null)
             {
-                AgvMapPath path = new AgvMapPath();
-                path.PathId = i;
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+    }
 
-                path.Position1 = new Point(pntX[i], pntY[i]);
-                if (i < 10 - 1)
-                {
-                    path.Position2 = new Point(pntX[i + 1], pntY[i + 1]);
-                }
-                else
-                {
-                    path.Position2 = new Point(pntX[0], pntY[0]);
-                }
-                _paths.Add(path);
+    public class AgvMapCard : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        public int CardId { get; set; }
+        public int PositionX { get; set; }
+        public int PositionY { get; set; }
+        private void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+    }
 
-                AgvMapCard card = new AgvMapCard();
-                card.CardId = i;
-                card.Position = new Point(pntX[i], pntY[i]);
-                _cards.Add(card);
+    public class AgvMap : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+        public int Id { get; set; }
+        public ObservableCollection<AgvMapPath> Paths { get; set; }
+        public ObservableCollection<AgvMapCard> Cards { get; set; }
+        private void NotifyPropertyChanged(String info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
 
-        public Point getCardPosition(int cardId)
+        public bool getCardPosition(UInt16 cardId, out Point point)
         {
-            foreach (AgvMapCard card in _cards)
+            foreach (AgvMapCard card in Cards)
             {
                 if (card.CardId == cardId)
                 {
-                    return card.Position;
+                    point = new Point(card.PositionX, card.PositionY);
+                    return true;
                 }
             }
-            return new Point();
+            point = new Point();
+            return false;
         }
 
     }

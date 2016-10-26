@@ -19,5 +19,6 @@
             <Canvas x:Name="cardLayer"/>
             <Canvas x:Name="agvLayer" />
         </Grid>
+        <local:GridLayer x:Name="grid"/>
     </Grid>
 </UserControl>

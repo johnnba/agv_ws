@@ -13,11 +13,10 @@ namespace AGV_WS.src.model
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private AgvPlan() { }
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int TaskNum { get; set; } //待定
-        public ObservableCollection<AgvTask> Tasks { get; set; }
+        public UInt16 planid { get; set; }
+        public string planname { get; set; }
+        public int tasknum { get; set; } //待定
+        public ObservableCollection<AgvTask> taskset { get; set; }
         private void NotifyPropertyChanged(String info)
         {
             if (PropertyChanged != null)

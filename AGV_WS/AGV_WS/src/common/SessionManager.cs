@@ -19,21 +19,20 @@ namespace AGV_WS.src.common
             _sessions = new ObservableCollection<AgvSession>();
         }
 
-        //public void AddSession(int agvId, AgvSession thread)
-        //{
-        //    foreach (AgvSession session in _sessions)
-        //    {
-        //        if (session.AgvId == agvId)
-        //        {
-        //            session.WorkThread.Stop();
-        //            _sessions.Remove(session);
-        //        }
-        //    }
+        public void AddSession(AgvSession session)
+        {
+            foreach (AgvSession s in _sessions)
+            {
+                if (s.AgvId == session.AgvId)
+                {
+                    _sessions.Remove(s);
+                }
+            }
 
-        //    _sessions.Add(new AgvSessionOld(agvId, thread));
+            _sessions.Add(session);
 
-        //    print();
-        //}
+            print();
+        }
 
         //public void RemoveSession(int agvId)
         //{

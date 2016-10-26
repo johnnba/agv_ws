@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Windows;
 
 namespace AGV_WS.src.model
 {
@@ -12,30 +13,36 @@ namespace AGV_WS.src.model
         public event PropertyChangedEventHandler PropertyChanged;
 
         private UInt64 _id;
-        private string _position;
-        private int _status;
-        private int _power;
+        private UInt16 _position_card_id;
+        private UInt16 _status;
+        private UInt16 _usonic;
+        private UInt16 _speed;
+        private UInt16 _voltage;
         private bool _online;
         private int _current_plan_id;
-
+        
+        public string Color { get { return _online ? "Black" : "Gray"; } }
         public UInt64 Id { get { return _id; } set { _id = value; } }
-        public string Position { get { return _position; } set { _position = value; } }
-        public int Status { get { return _status; } set { _status = value; } }
-        public int Power { get { return _power; } set { _power = value; } }
-        public bool Online { get { return _online; } set { _online = value; } }
+        public UInt16 PositionCardId { get { return _position_card_id; } set { _position_card_id = value; NotifyPropertyChanged("Position"); } }
+        public UInt16 UltraSonic { get { return _usonic; } set { _usonic = value; NotifyPropertyChanged("UltraSonic"); } }
+        public UInt16 Speed { get { return _speed; } set { _speed = value; NotifyPropertyChanged("Speed"); } }
+        public UInt16 Voltage { get { return _voltage; } set { _voltage = value; NotifyPropertyChanged("Voltage"); NotifyPropertyChanged("PowerColor");  } }
+        public string Position { get { return _position_card_id.ToString("D5"); } }
+        public UInt16 Status { get { return _status; } set { _status = value; NotifyPropertyChanged("Status"); } }
+        public bool Online { get { return _online; } set { _online = value; NotifyPropertyChanged("Online"); NotifyPropertyChanged("Color"); } }
         public int CurrentPlanId { get { return _current_plan_id; } set { _current_plan_id = value; } }
         public AgvPlan CurrentPlan { get { return AgvPlanManager.instance.GetPlan(_current_plan_id); } }
 
 
-        public string Color
+        public string PowerColor
         {
             get
             {
-                if (_power <= 10)
+                if (_voltage <= 10)
                 {
                     return "Red";
                 }
-                else if (_power <= 60)
+                else if (_voltage <= 60)
                 {
                     return "Orange";
                 }

@@ -8,6 +8,9 @@
         xmlns:model="clr-namespace:AGV_WS.src.model"
         mc:Ignorable="d"
         Title="{x:Static res:Resources.IDS_MAIN_TITLE}">
+    <Window.Resources>
+        <local:ColorConverter x:Key="colorCvt" />
+    </Window.Resources>
     <Grid>
         <DockPanel>
             <Grid DockPanel.Dock="Top">
@@ -45,19 +48,39 @@
                     <TextBlock Name="tb" Foreground="Black" Text="Status bar" />
                 </StatusBar>
             </Grid>
-            <DockPanel>
-                <Grid DockPanel.Dock="Bottom">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80*"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="20*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <local:MapView x:Name="mapViewer" Loaded="mapViewer_Loaded"/>
+                </Grid>
+                <GridSplitter Height="3" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Stretch" />
+                <Grid Grid.Row="2">
                     <StackPanel Orientation="Horizontal">
                         <ListView x:Name="agvListView" ScrollViewer.CanContentScroll="True" SelectionChanged="agvListView_SelectionChanged" >
+                            <ListView.Resources>
+                                <Style TargetType="{x:Type ListViewItem}" >
+                                    <Setter Property="Margin" Value="4" />
+                                    <Setter Property="Foreground" Value="{Binding Color, Converter={StaticResource colorCvt}}"/>
+                                </Style>
+                                <Style TargetType="{x:Type Button}">
+                                    <Setter Property="Foreground" Value="{Binding Color, Converter={StaticResource colorCvt}}"/>
+                                </Style>
+                            </ListView.Resources>
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="{x:Static res:Resources.IDS_AGV_ID}" DisplayMemberBinding="{Binding Id}"/>
-                                    <GridViewColumn Header="{x:Static res:Resources.IDS_AGV_POSITION}" DisplayMemberBinding="{Binding Position}"/>
                                     <GridViewColumn Header="{x:Static res:Resources.IDS_AGV_STATUS}" DisplayMemberBinding="{Binding Status}"/>
+                                    <GridViewColumn Header="{x:Static res:Resources.IDS_AGV_POSITION}" DisplayMemberBinding="{Binding Position}"/>
+                                    <GridViewColumn Header="{x:Static res:Resources.IDS_AGV_SPEED}" DisplayMemberBinding="{Binding Speed}"/>
+                                    <GridViewColumn Header="{x:Static res:Resources.IDS_AGV_ULTRASONIC}" DisplayMemberBinding="{Binding UltraSonic}"/>
                                     <GridViewColumn Header="{x:Static res:Resources.IDS_AGV_POWER}" >
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <ProgressBar Value="{Binding Path=Power}" Minimum="0" SmallChange="1" Width="60" Height="16" Foreground="{Binding Path=Color}" />
+                                                <ProgressBar Value="{Binding Path=Voltage}" Minimum="0" SmallChange="1" Width="60" Height="16" Foreground="{Binding Path=PowerColor}" />
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
@@ -78,44 +101,43 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
-                        <TreeView x:Name="agvPathTree" Height="200" Width="300">
+                        <TreeView x:Name="agvPathTree" Width="300" >
                             <TreeView.ItemContainerStyle>
                                 <Style TargetType="{x:Type TreeViewItem}">
                                     <Setter Property="IsExpanded" Value="True" />
                                 </Style>
                             </TreeView.ItemContainerStyle>
                             <TreeView.Resources>
-                                <HierarchicalDataTemplate  DataType="{x:Type model:AgvPlan}" ItemsSource="{Binding Tasks}">
+                                <HierarchicalDataTemplate  DataType="{x:Type model:AgvPlan}" ItemsSource="{Binding taskset}">
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Name}" />
+                                        <TextBlock Text="{Binding planname}" />
                                     </StackPanel>
                                 </HierarchicalDataTemplate>
-                                <HierarchicalDataTemplate  DataType="{x:Type model:AgvTask}" ItemsSource="{Binding Steps}">
+                                <HierarchicalDataTemplate  DataType="{x:Type model:AgvTask}" ItemsSource="{Binding stepset}">
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Name}"  Margin="5 0 0 0"/>
+                                        <TextBlock Text="{Binding taskname}"  Margin="5 0 0 0"/>
                                         <TextBlock Text="Loop:"  Margin="5 0 0 0"/>
-                                        <TextBlock Text="{Binding Loop}" />
+                                        <TextBlock Text="{Binding loop}" />
                                     </StackPanel>
                                 </HierarchicalDataTemplate>
-                                <HierarchicalDataTemplate  DataType="{x:Type model:AgvStep}" ItemsSource="{Binding Cmds}">
+                                <HierarchicalDataTemplate  DataType="{x:Type model:AgvStep}" ItemsSource="{Binding cmdset}">
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding CardId}" />
+                                        <TextBlock Text="{Binding cardid}" />
                                     </StackPanel>
                                 </HierarchicalDataTemplate>
                                 <HierarchicalDataTemplate  DataType="{x:Type model:AgvCmd}">
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Key}" />
-                                        <TextBlock Text="{Binding Value}" />
+                                        <TextBlock Text="type:"/>
+                                        <TextBlock Text="{Binding type}" Margin="5 0"/>
+                                        <TextBlock Text="value:"/>
+                                        <TextBlock Text="{Binding value}" Margin="5 0"/>
                                     </StackPanel>
                                 </HierarchicalDataTemplate>
                             </TreeView.Resources>
                         </TreeView>
                     </StackPanel>
                 </Grid>
-                <Grid>
-                    <local:MapView x:Name="mapViewer" Loaded="mapViewer_Loaded"/>
-                </Grid>
-            </DockPanel>
+            </Grid>
         </DockPanel>
     </Grid>
 </Window>

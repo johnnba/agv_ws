@@ -102,6 +102,10 @@
     <Compile Include="src\ui\CardMarker.xaml.cs">
       <DependentUpon>CardMarker.xaml</DependentUpon>
     </Compile>
+    <Compile Include="src\ui\ColorConverter.cs" />
+    <Compile Include="src\ui\GridLayer.xaml.cs">
+      <DependentUpon>GridLayer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="src\ui\MapView.xaml.cs">
       <DependentUpon>MapView.xaml</DependentUpon>
     </Compile>
@@ -115,6 +119,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="src\ui\CardMarker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="src\ui\GridLayer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -157,6 +165,12 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="db\map.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="db\plan.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -168,7 +182,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="db\" />
     <Folder Include="lib\" />
     <Folder Include="res\" />
   </ItemGroup>
